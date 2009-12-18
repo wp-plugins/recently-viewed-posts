@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Recently Viewed Posts
-Version: 0.1
+Version: 2.0.0
 Plugin URI: http://www.pinoy.ca/
 Description: Show "What others are reading now" links on your page. 
 Author: Pinoy.ca 
 Author URI: http://www.pinoy.ca/
 
-Copyright ( c ) 2008
+Copyright ( c ) 2009
 Released under the GPL license
 http://www.gnu.org/licenses/gpl.txt
 

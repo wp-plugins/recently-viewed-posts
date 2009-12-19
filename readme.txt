@@ -6,9 +6,40 @@ Requires at least: 2.1
 Tested up to: 2.8.9
 Stable tag: trunk
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Displays the titles of the last x number of posts that readers (other than the current reader) visited on your blog, and the amount of time elapsed since they visited it.
 
 == Description ==
+
+Display the titles of the last <i>x</i> number of posts that readers visited on your blog, and the amount of time elapsed since they visited it, in a variety of forms:
+
+* return them as a string of list items
+* print a ul list with a h3 heading and enclosed as a div. 
+* as a WordPress widget.
+
+Rationale
+* Readers are curious what other readers have found interesting to read. RVP is very addictive. Try it on your site and see your traffic increase.
+
+Features
+* Insanely fast. It has to be because it needs to run on each page load.
+* Creates and uses no tables, writes no files, uses no cookies, loads no css or javascript, needs no plugin initialization.
+* Produces XHTML-compliant markup.
+* Each IP is identified by and anonymized with a graphical 10x10 icon using Gravatar.
+* Can be modified to record and display the posts' publication date, referer data, search keywords or cookies. Whatever you want or what your Privacy Policy allows.
+
+Technobabbly features
+* IP addresses are hashed before being stored, so you cannot read them in your database backups. Hashing uses SECRET_KEY where available, to protect against rainbow tables.
+* Uses $_SERVER['HTTP_CLIENT_IP'] or $_SERVER['HTTP_X_FORWARDED_FOR'] instead of $_SERVER['REMOTE_ADDR'] where available.
+* Uses the WordPress Object Cache. If the posts' data are already retrieved earlier, this plugin will use it instead of querying the database.
+* If you list more than 5 items, the plugin retrieves the posts' data in one wp_query, instead of individually.
+* Uses the WordPress 2.8 Transients API where available.
+
+Usage
+* get_recently_viewed_posts( $max_shown = 10 ) returns a string of li's.
+* recently_viewed_posts( $max_shown = 10 ) prints a div
+* Configure the widget inside your Widget Admin screen
+
+* return them as list items of the form `<li class="recently-viewed-posts-entry"><a href="Post_Permalink">Title_of_Post</a></li>`
+* print a ul list of the form 
 
 This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
 

@@ -168,9 +168,9 @@ function get_recently_viewed_posts( $max_shown = 10 ) {
 	foreach ( $recently_viewed_posts as $item ) 
 		if ( $item[1] != recently_viewed_posts_get_remote_IP() ) {
 			$html .= '<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/' . $item[1] 
-				.'.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" />&nbsp;<a href="'
-				.get_permalink( $item[0] ).'">'.get_the_title( $item[0] ).'</a> '
-				.recently_viewed_posts_time_since( $item[2] ).' ago </li>';
+				.'.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="'
+				.get_permalink( $item[0] ).'" class="recently-viewed-posts-link">'.get_the_title( $item[0] ).'</a> <span class="recently-viewed-posts-timespan">'
+				.recently_viewed_posts_time_since( $item[2] ).' ago</span> </li>';
 			if ( ++$count == $max_shown ) 
 				break;  // i've shown enough
 		}

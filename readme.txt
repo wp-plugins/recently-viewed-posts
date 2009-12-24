@@ -46,21 +46,25 @@ Display the titles of the last `x` number of posts that readers visited on your 
 
 `
 <div class="recently-viewed-posts"><h3 class="recently-viewed-posts-header">What others are reading right now</h3><div class="recently-viewed-posts-list"><ul class="recently-viewed-posts-list">
-	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="http://www.blog.com/foobar-post/" class="recently-viewed-posts-link">Title of Post</a> <span class="recently-viewed-posts-timespan">3 seconds ago</span></li>
+	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" f />&nbsp;<a href="http://www.blog.com/foobar-post/" class="recently-viewed-posts-link">Title of Post</a> <span class="recently-viewed-posts-timespan">3 seconds ago</span></li>
 	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="http://www.blog.com/foobar-page/" class="recently-viewed-posts-link">Name of Page</a> <span class="recently-viewed-posts-timespan">2 minutes, 15 seconds ago</span></li>
 </ul></div></div>
 `
 
+= Demo =
+
+http://www.pinoy.ca/eharmony/1616 shows two versions of it in action.
+
 = Hooks and Filters =
 
-(Future version will support hooks, so that you can alter the plugin workings without editing the plugin)
+(Future version will support hooks and filters, so that you can alter the plugin workings without editing the plugin.  How's that for service?)
 
 
 == Installation ==
 
 1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php recently_viewed_posts(); ?>` in your templates
+1. Place `<?php recently_viewed_posts(); ?>` in your templates, or install the Widget.
 
 == Frequently Asked Questions ==
 
@@ -70,7 +74,7 @@ We made this with speed foremost in mind.  It ought to be as fast if not faster 
 
 = What is recorded on visits to Archive pages (such as Author, Tag, Category pages and date archives) or the blog's front page? =
 
-The first post in that page is recorded.
+The first or topmost post in that page is recorded.
 
 = Is this a privacy violation? =
 
@@ -78,9 +82,9 @@ Inasmuch as it lets the public see that a reader represented by a certain green 
 
 = I want to see which pages were visited two days ago, can I do that? =
 
-The plugin remembers only the last MAX_RECENTLY_VIEWED_LINKS, which is 16 by default.  There are bigger, more flexible visitor tracking and logging plugins that can do what you want.
+The plugin remembers only the last `MAX_RECENTLY_VIEWED_LINKS`, which is 16 by default.  There are bigger, more flexible visitor tracking and logging plugins that can do what you want.
 
-You can set MAX_RECENTLY_VIEWED_LINKS in your wp-config.php, or just edit the plugin file directly.  For example, `define(MAX_RECENTLY_VIEWED_LINKS, 300);` would slow the plugin down. The best value should be 2 or 3 times how many visits you display.
+You can set `MAX_RECENTLY_VIEWED_LINKS` in your wp-config.php, or just edit the plugin file directly.  For example, `define(MAX_RECENTLY_VIEWED_LINKS, 300);` would slow the plugin down. The best value should be 2 or 3 times how many visits you display.
 
 = Why is nothing showing up? =
 

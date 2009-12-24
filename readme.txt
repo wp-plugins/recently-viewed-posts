@@ -24,7 +24,7 @@ Display the titles of the last `x` number of posts that readers visited on your 
 
 * Insanely fast. It has to be because it needs to run on each page load.
 * Creates and uses no tables, writes no files, uses no cookies, loads no css or javascript, needs no plugin initialization.
-* Produces XHTML-compliant markup.
+* Produces XHTML-compliant, semantic markup
 * Each IP is identified by and anonymized with a graphical 10x10 icon using Gravatar.
 * Can be modified to record and display the posts' publication date, referer data, search keywords or cookies. Whatever you want or what your Privacy Policy allows.
 
@@ -46,10 +46,15 @@ Display the titles of the last `x` number of posts that readers visited on your 
 
 `
 <div class="recently-viewed-posts"><h3 class="recently-viewed-posts-header">What others are reading right now</h3><div class="recently-viewed-posts-list"><ul class="recently-viewed-posts-list">
-	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" />&nbsp;<a href="http://www.blog.com/foobar-post/">Title of Post</a> 3 seconds ago</li>
-	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" />&nbsp;<a href="http://www.blog.com/foobar-page/">Name of Page</a> 2 minutes, 15 seconds ago</li>
+	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="http://www.blog.com/foobar-post/" class="recently-viewed-posts-link">Title of Post</a> <span class="recently-viewed-posts-timespan">3 seconds ago</span></li>
+	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="http://www.blog.com/foobar-page/" class="recently-viewed-posts-link">Name of Page</a> <span class="recently-viewed-posts-timespan">2 minutes, 15 seconds ago</span></li>
 </ul></div></div>
 `
+
+= Hooks and Filters =
+
+(Future version will support hooks, so that you can alter the plugin workings without editing the plugin)
+
 
 == Installation ==
 
@@ -73,13 +78,9 @@ Inasmuch as it lets the public see that a reader represented by a certain green 
 
 = I want to see which pages were visited two days ago, can I do that? =
 
-The plugin remembers only the last MAX_RECENTLY_VIEWED_LINKS, which is 16 by default.  There are bigger, more flexible visitor tracking and logging plugins that can do this for you.
+The plugin remembers only the last MAX_RECENTLY_VIEWED_LINKS, which is 16 by default.  There are bigger, more flexible visitor tracking and logging plugins that can do what you want.
 
-You can set MAX_RECENTLY_VIEWED_LINKS in your wp-config.php, or just edit the plugin file directly.  For example,
-
-`define(MAX_RECENTLY_VIEWED_LINKS, 300);`
-
-would slow the plugin down. The best value should be 2 or 3 times how many visits you display.
+You can set MAX_RECENTLY_VIEWED_LINKS in your wp-config.php, or just edit the plugin file directly.  For example, `define(MAX_RECENTLY_VIEWED_LINKS, 300);` would slow the plugin down. The best value should be 2 or 3 times how many visits you display.
 
 = Why is nothing showing up? =
 
@@ -95,8 +96,11 @@ Since the plugin code needs to run on each page load, this plugin will not run w
 
 == Changelog ==
 
+= 2.0.1 =
+* Classes in markup.
+
 = 2.0.0 =
-* Support for WordPress 2.8 Transients API where available.
+* Support for WordPress 2.8 Transients API where available.  
 
 = 1.0 =
 * Unreleased

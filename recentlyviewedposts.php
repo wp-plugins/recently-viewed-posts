@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Recently Viewed Posts
-Version: 2.0.0
+Version: 2.0.1
 Plugin URI: http://www.pinoy.ca/
 Description: Show "What others are reading now" links on your page. 
 Author: Pinoy.ca 
@@ -36,18 +36,18 @@ http://www.gnu.org/licenses/gpl.txt
 	GPL Copyright as above, Tested on WP 2.4+, No warranties promised or implied, use at your own risk
 	
 	TROUBLESHOOT:
-	Uncomment the line "recently_viewed_posts_uninstall( 'recently_viewed_posts' )" to reset the thing!
+	Uncomment the line "recently_viewed_posts_uninstall()" to reset the thing!
 
 */
 
 // Uncomment the next line to reset the thing!
-// recently_viewed_posts_uninstall( 'recently_viewed_posts' );
+// recently_viewed_posts_uninstall();
 
 // Max number of links to keep
 if ( !defined( MAX_RECENTLY_VIEWED_LINKS ) )
 	define( MAX_RECENTLY_VIEWED_LINKS, 16 );
 
-add_action( 'wp_footer','add_to_recently_viewed_posts' );
+add_action( 'wp_footer', 'add_to_recently_viewed_posts' );
 
 function recently_viewed_posts_cache_set( $value = null ) {
 	// use WP2.8 Transients API if available
@@ -87,7 +87,7 @@ function add_to_recently_viewed_posts() {
 		}
 	array_unshift( $recently_viewed_posts, array( $post->ID, recently_viewed_posts_get_remote_IP(), time(), $_SERVER['HTTP_REFERER'] ) );
 
-	// make sure we only keep maxRecentlyViewedLinks number of links
+	// make sure we only keep MAX_RECENTLY_VIEWED_LINKS number of links
 	if ( count( $recently_viewed_posts ) > MAX_RECENTLY_VIEWED_LINKS ) 
 		$recently_viewed_posts = array_slice( $recently_viewed_posts, 0, MAX_RECENTLY_VIEWED_LINKS );
 	// save

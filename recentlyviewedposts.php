@@ -167,7 +167,7 @@ function get_recently_viewed_posts( $max_shown = 10 ) {
 	$count = 0;
 	foreach ( $recently_viewed_posts as $item ) 
 		if ( $item[1] != recently_viewed_posts_get_remote_IP() ) {
-			$html .= '<li><img src="http://www.gravatar.com/avatar/' . $item[1] 
+			$html .= '<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/' . $item[1] 
 				.'.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" />&nbsp;<a href="'
 				.get_permalink( $item[0] ).'">'.get_the_title( $item[0] ).'</a> '
 				.recently_viewed_posts_time_since( $item[2] ).' ago </li>';
@@ -224,7 +224,7 @@ add_action( 'widgets_init', 'widget_recently_viewed_posts_init' );
 function recently_viewed_posts( $max_shown = 5 ) {
 	$html = get_recently_viewed_posts( $max_shown );
 	if ( $html && ( $html != "" ) ) {
-		echo '<div class="comments"><h3 class="comment-header">What others are reading right now</h3><div class="comment-list"><ul>';
+		echo '<div class="recently-viewed-posts"><h3 class="recently-viewed-posts-header">What others are reading right now</h3><div class="recently-viewed-posts-list"><ul class="recently-viewed-posts-list">';
 		echo $html;
 		echo "</ul></div></div>";
 	}

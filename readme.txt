@@ -1,0 +1,118 @@
+=== Plugin Name ===
+Contributors: Pinoy.ca
+Donate link: http://wwf.com/
+Tags: recently-viewed, recent
+Requires at least: 2.1
+Tested up to: 2.8.9
+Stable tag: trunk
+
+Displays the titles of the last x number of posts that readers (other than the current reader) visited on your blog, and the amount of time elapsed since they visited it.
+
+== Description ==
+
+Display the titles of the last `x` number of posts that readers visited on your blog, and the amount of time elapsed since they visited it, in a variety of forms:
+
+* return them as a string of list items
+* print a ul list with a h3 heading and enclosed as a div. 
+* as a WordPress widget.
+
+= Rationale =
+
+* Readers are curious what other readers have found interesting to read. RVP is very addictive. Try it on your site and see your traffic increase.
+
+= Features =
+
+* Insanely fast. It has to be because it needs to run on each page load.
+* Creates and uses no tables, writes no files, uses no cookies, loads no css or javascript, needs no plugin initialization.
+* Produces XHTML-compliant, semantic markup
+* Each IP is identified by and anonymized with a graphical 10x10 icon using Gravatar.
+* Can be modified to record and display the posts' publication date, referer data, search keywords or cookies. Whatever you want or what your Privacy Policy allows.
+
+= Technobabbly features =
+
+* IP addresses are hashed before being stored, so nobody cannot get them from your database backups. Hashing uses your blog's `SECRET_KEY` where available, to protect against rainbow tables.
+* Uses `$_SERVER['HTTP_CLIENT_IP']` or `$_SERVER['HTTP_X_FORWARDED_FOR']` instead of `$_SERVER['REMOTE_ADDR']` where available.
+* Uses the WordPress Object Cache. If the posts' data are already retrieved earlier, this plugin will use it instead of querying the database.
+* If you list more than 5 items, the plugin retrieves the posts' data in one `wp_query`, instead of individually.
+* Uses the WordPress 2.8 Transients API where available.
+
+= Usage =
+
+* `get_recently_viewed_posts( $max_shown = 10 )` returns a string of li's.
+* `recently_viewed_posts( $max_shown = 10 )` prints a div
+* Configure the widget inside your Widget Admin screen
+
+= Sample markup =
+
+`
+<div class="recently-viewed-posts"><h3 class="recently-viewed-posts-header">What others are reading right now</h3><div class="recently-viewed-posts-list"><ul class="recently-viewed-posts-list">
+	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" f />&nbsp;<a href="http://www.blog.com/foobar-post/" class="recently-viewed-posts-link">Title of Post</a> <span class="recently-viewed-posts-timespan">3 seconds ago</span></li>
+	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="http://www.blog.com/foobar-page/" class="recently-viewed-posts-link">Name of Page</a> <span class="recently-viewed-posts-timespan">2 minutes, 15 seconds ago</span></li>
+</ul></div></div>
+`
+
+= Demo =
+
+http://www.pinoy.ca/eharmony/1616 shows two versions of it in action.
+
+= Hooks and Filters =
+
+(Future version will support hooks and filters, so that you can alter the plugin workings without editing the plugin.  How's that for service?)
+
+
+== Installation ==
+
+1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
+1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Place `<?php recently_viewed_posts(); ?>` in your templates, or install the Widget.
+
+== Frequently Asked Questions ==
+
+= Is this fast? =
+
+We made this with speed foremost in mind.  It ought to be as fast if not faster than any visitor tracking or logging plugin out there.  
+
+= What is recorded on visits to Archive pages (such as Author, Tag, Category pages and date archives) or the blog's front page? =
+
+The first or topmost post in that page is recorded.
+
+= Is this a privacy violation? =
+
+Inasmuch as it lets the public see that a reader represented by a certain green squiggly icon visited articles X, Y and Z around 50 seconds apart, yes, it is.  The IP address is encrypted, and no one except the blog's administrator will be able to brute-force and get the reader's IP address.  In that case, the blog admin will probably use the server logs instead.
+
+= I want to see which pages were visited two days ago, can I do that? =
+
+The plugin remembers only the last `MAX_RECENTLY_VIEWED_LINKS`, which is 16 by default.  There are bigger, more flexible visitor tracking and logging plugins that can do what you want.
+
+You can set `MAX_RECENTLY_VIEWED_LINKS` in your wp-config.php, or just edit the plugin file directly.  For example, `define(MAX_RECENTLY_VIEWED_LINKS, 300);` would slow the plugin down. The best value should be 2 or 3 times how many visits you display.
+
+= Why is nothing showing up? =
+
+Remember that it displays what *other readers* visited.  Tell a friend across the country to visit your blog.
+
+= Can a visitor masquerade as another visitor? =
+
+Of course.  See (http://en.wikipedia.org/wiki/IP_address_spoofing http://en.wikipedia.org/wiki/IP_address_spoofing) for starters.
+
+= Does it work with WP Super Cache? =
+
+Since the plugin code needs to run on each page load, this plugin will not run when Super Cache is installed and active.  A future version will run in Super Cache half-on mode and another version after that will run in Super Cache full mode.
+
+== Changelog ==
+
+= 2.0.1 =
+* Classes in markup.
+
+= 2.0.0 =
+* Support for WordPress 2.8 Transients API where available.  
+
+= 1.0 =
+* Unreleased
+ 
+== Upgrade Notice ==
+
+= 1.0 =
+Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
+
+= 0.5 =
+This version fixes a security related bug.  Upgrade immediately.

@@ -10,61 +10,46 @@ Displays the titles of the last x number of posts that readers (other than the c
 
 == Description ==
 
-Display the titles of the last <i>x</i> number of posts that readers visited on your blog, and the amount of time elapsed since they visited it, in a variety of forms:
+Display the titles of the last `x` number of posts that readers visited on your blog, and the amount of time elapsed since they visited it, in a variety of forms:
 
 * return them as a string of list items
 * print a ul list with a h3 heading and enclosed as a div. 
 * as a WordPress widget.
 
-Rationale
+= Rationale =
+
 * Readers are curious what other readers have found interesting to read. RVP is very addictive. Try it on your site and see your traffic increase.
 
-Features
+= Features =
+
 * Insanely fast. It has to be because it needs to run on each page load.
 * Creates and uses no tables, writes no files, uses no cookies, loads no css or javascript, needs no plugin initialization.
 * Produces XHTML-compliant markup.
 * Each IP is identified by and anonymized with a graphical 10x10 icon using Gravatar.
 * Can be modified to record and display the posts' publication date, referer data, search keywords or cookies. Whatever you want or what your Privacy Policy allows.
 
-Technobabbly features
-* IP addresses are hashed before being stored, so you cannot read them in your database backups. Hashing uses SECRET_KEY where available, to protect against rainbow tables.
-* Uses $_SERVER['HTTP_CLIENT_IP'] or $_SERVER['HTTP_X_FORWARDED_FOR'] instead of $_SERVER['REMOTE_ADDR'] where available.
+= Technobabbly features =
+
+* IP addresses are hashed before being stored, so nobody cannot get them from your database backups. Hashing uses your blog's `SECRET_KEY` where available, to protect against rainbow tables.
+* Uses `$_SERVER['HTTP_CLIENT_IP']` or `$_SERVER['HTTP_X_FORWARDED_FOR']` instead of `$_SERVER['REMOTE_ADDR']` where available.
 * Uses the WordPress Object Cache. If the posts' data are already retrieved earlier, this plugin will use it instead of querying the database.
-* If you list more than 5 items, the plugin retrieves the posts' data in one wp_query, instead of individually.
+* If you list more than 5 items, the plugin retrieves the posts' data in one `wp_query`, instead of individually.
 * Uses the WordPress 2.8 Transients API where available.
 
-Usage
-* get_recently_viewed_posts( $max_shown = 10 ) returns a string of li's.
-* recently_viewed_posts( $max_shown = 10 ) prints a div
+= Usage =
+
+* `get_recently_viewed_posts( $max_shown = 10 )` returns a string of li's.
+* `recently_viewed_posts( $max_shown = 10 )` prints a div
 * Configure the widget inside your Widget Admin screen
 
-* return them as list items of the form `<li class="recently-viewed-posts-entry"><a href="Post_Permalink">Title_of_Post</a></li>`
-* print a ul list of the form 
+= Sample markup =
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
-
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
-
-A few notes about the sections above:
-
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
-
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
-
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+`
+<div class="recently-viewed-posts"><h3 class="recently-viewed-posts-header">What others are reading right now</h3><div class="recently-viewed-posts-list"><ul class="recently-viewed-posts-list">
+	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" />&nbsp;<a href="http://www.blog.com/foobar-post/">Title of Post</a> 3 seconds ago</li>
+	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" />&nbsp;<a href="http://www.blog.com/foobar-page/">Name of Page</a> 2 minutes, 15 seconds ago</li>
+</ul></div></div>
+`
 
 == Installation ==
 
@@ -98,7 +83,7 @@ would slow the plugin down. The best value should be 2 or 3 times how many visit
 
 = Why is nothing showing up? =
 
-Remember that it displays what OTHER READERS visited.  Tell a friend across the country to visit your blog.
+Remember that it displays what *other readers* visited.  Tell a friend across the country to visit your blog.
 
 = Can a visitor masquerade as another visitor? =
 
@@ -123,34 +108,3 @@ Upgrade notices describe the reason a user should upgrade.  No more than 300 cha
 
 = 0.5 =
 This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`

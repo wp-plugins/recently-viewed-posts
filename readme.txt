@@ -12,27 +12,27 @@ Displays the titles of the last x number of posts that readers (other than the c
 
 Display the titles of the last `x` number of posts that readers visited on your blog, and the amount of time elapsed since they visited it, in a variety of forms:
 
-* return them as a string of list items
+* return them as a string of list items.
 * print a ul list with a h3 heading and enclosed as a div. 
 * as a WordPress widget.
 
 = Rationale =
 
-* Readers are curious what other readers have found interesting to read. RVP is very addictive. Try it on your site and see your traffic increase.
+* Readers are curious what other readers have found interesting to read. That's why RVP is very addictive. Put it on your site where readers can see it and watch your traffic increase.
 
 = Features =
 
 * Insanely fast. It has to be because it needs to run on each page load.
 * Creates and uses no tables, writes no files, uses no cookies, loads no css or javascript, needs no plugin initialization.
-* Produces XHTML-compliant, semantic markup
+* Produces XHTML-compliant, semantic markup.
 * Each IP is identified by and anonymized with a graphical 10x10 icon using Gravatar.
 * Can be modified to record and display the posts' publication date, referer data, search keywords or cookies. Whatever you want or what your Privacy Policy allows.
 
 = Technobabbly features =
 
-* IP addresses are hashed before being stored, so nobody cannot get them from your database backups. Hashing uses your blog's `SECRET_KEY` where available, to protect against rainbow tables.
+* IP addresses are hashed before being stored, so nobody can get them from your database backups. Hashing uses your blog's `SECRET_KEY` where available, to protect against rainbow tables.
 * Uses `$_SERVER['HTTP_CLIENT_IP']` or `$_SERVER['HTTP_X_FORWARDED_FOR']` instead of `$_SERVER['REMOTE_ADDR']` where available.
-* Uses the WordPress Object Cache. If the posts' data are already retrieved earlier, this plugin will use it instead of querying the database.
+* Uses the WordPress Object Cache. If the posts' data were already retrieved earlier, this plugin will use that instead of querying the database.
 * If you list more than 5 items, the plugin retrieves the posts' data in one `wp_query`, instead of individually.
 * Uses the WordPress 2.8 Transients API where available.
 
@@ -50,6 +50,7 @@ Display the titles of the last `x` number of posts that readers visited on your 
 	<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E1A2B3C4D5E.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="http://www.blog.com/foobar-page/" class="recently-viewed-posts-link">Name of Page</a> <span class="recently-viewed-posts-timespan">2 minutes, 15 seconds ago</span></li>
 </ul></div></div>
 `
+
 
 = Demo =
 
@@ -90,9 +91,21 @@ You can set `MAX_RECENTLY_VIEWED_LINKS` in your wp-config.php, or just edit the 
 
 Remember that it displays what *other readers* visited.  Tell a friend across the country to visit your blog.
 
+= My traffic didn't increase. That's false advertising! =
+
+Did you put it where readers can see it, like at the end of each post?  Using this as a sidebar widget is for cowards.
+
 = Can a visitor masquerade as another visitor? =
 
-Of course.  See (http://en.wikipedia.org/wiki/IP_address_spoofing http://en.wikipedia.org/wiki/IP_address_spoofing) for starters.
+Of course.  See http://en.wikipedia.org/wiki/IP_address_spoofing for starters.
+
+= Can a reader trace the other readers' IPs from the icon? =
+
+Hashing with a `SECRET_KEY` salt makes this impossible.
+
+= Can I hide my visits? =
+
+This will be tackled in an upcoming version.
 
 = Does it work with WP Super Cache? =
 

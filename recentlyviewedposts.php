@@ -88,8 +88,10 @@ function add_to_recently_viewed_posts() {
 			unset( $recently_viewed_posts[$key] ); 
 			break;
 		}
-	$data = array( $post->ID, recently_viewed_posts_get_remote_IP(), time() );
-	array_unshift( $recently_viewed_posts, apply_filters( "recently_viewed_posts_new", $data ) );
+	$item = array( $post->ID, recently_viewed_posts_get_remote_IP(), time() );
+	$item = apply_filters( "recently_viewed_posts_new", $item );
+	if ( empty( $item ) ) return;
+	array_unshift( $recently_viewed_posts, $item );
 
 	// make sure we only keep MAX_RECENTLY_VIEWED_LINKS number of links
 	if ( count( $recently_viewed_posts ) > MAX_RECENTLY_VIEWED_LINKS ) 

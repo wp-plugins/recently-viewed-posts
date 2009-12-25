@@ -193,10 +193,6 @@ Of course.  See http://en.wikipedia.org/wiki/IP_address_spoofing for starters.
 
 Hashing with a `SECRET_KEY` salt makes this impossible.
 
-= Can I hide my visits? =
-
-This will be tackled in an upcoming version.
-
 = Does it work with WP Super Cache? =
 
 Since the plugin code needs to run on each page load, this plugin will not run when Super Cache is installed and active.  A future version will run in Super Cache half-on mode and another version after that will run in Super Cache full mode.

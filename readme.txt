@@ -170,7 +170,7 @@ Create a handler for the `recently_viewed_posts_new` filter in your theme's `fun
 `
 add_filter("recently_viewed_posts_new", "my_rvp_ignore_admin_visits");
 function my_rvp_ignore_admin_visits( $item ) {
-	return is_admin() ? null : $item;
+	return current_user_can('manage_options') ? null : $item;
 }
 `
 
@@ -180,10 +180,21 @@ Create a handler for the `recently_viewed_posts_entry_format` filter in your the
 
 `
 add_filter("recently_viewed_posts_entry_format", "my_rvp_format");
-function my_rvp_format( $format ) {
+function my_rvp_format( $format, $item ) {
 	return '<li onmouseover="javascript:dynamo()"><a href="%URL%">%LINK%</a> %TIME% ago</li>';
 }
 `
+
+Meanwhile, the following uses the icon as the list item image, instead of a bullet:
+
+`
+add_filter("recently_viewed_posts_entry_format", "my_rvp_format_2");
+function my_rvp_format_2( $format, $item ) {
+	return '<li style="list-style-image:url(%ICON%)"><a href="%URL%">%LINK%</a> %TIME% ago</li>';
+}
+`
+
+Isn't this more flexible (and uses less memory!) than a configuration screen? ;-)
 
 = Can a visitor masquerade as another visitor? =
 

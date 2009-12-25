@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Recently Viewed Posts
-Version: 2.0.1
+Version: 2.1.0
 Plugin URI: http://www.pinoy.ca/
 Description: Show "What others are reading now" links on your page. 
 Author: Pinoy.ca 
@@ -50,6 +50,7 @@ if ( !defined( MAX_RECENTLY_VIEWED_LINKS ) )
 add_action( 'wp_footer', 'add_to_recently_viewed_posts' );
 
 function recently_viewed_posts_cache_set( $value = null ) {
+	$value = apply_filters("recently_viewed_posts_cache_set", $value);
 	// use WP2.8 Transients API if available
 	if ( function_exists( 'set_transient' ) ) 
 		set_transient( 'recently_viewed_posts', $value, $expiration = 0 );
@@ -61,12 +62,14 @@ function recently_viewed_posts_cache_set( $value = null ) {
 
 function recently_viewed_posts_cache_get() {
 	// use WP2.8 Transients API if available
-	return function_exists( 'get_transient' ) ? get_transient( 'recently_viewed_posts' ) :
+	$get = function_exists( 'get_transient' ) ? get_transient( 'recently_viewed_posts' ) :
 		get_option( 'recently_viewed_posts' );
+	return apply_filters("recently_viewed_posts_cache_get", $get);
 }
 
 function recently_viewed_posts_uninstall() {
 	// use WP2.8 Transients API if available
+	do_action("recently_viewed_posts_uninstall_pre");
 	return function_exists( 'delete_transient' ) ? delete_transient( 'recently_viewed_posts' ) :
 		delete_option( 'recently_viewed_posts' );
 }
@@ -85,7 +88,8 @@ function add_to_recently_viewed_posts() {
 			unset( $recently_viewed_posts[$key] ); 
 			break;
 		}
-	array_unshift( $recently_viewed_posts, array( $post->ID, recently_viewed_posts_get_remote_IP(), time(), $_SERVER['HTTP_REFERER'] ) );
+	$data = array( $post->ID, recently_viewed_posts_get_remote_IP(), time() );
+	array_unshift( $recently_viewed_posts, apply_filters( "recently_viewed_posts_new", $data ) );
 
 	// make sure we only keep MAX_RECENTLY_VIEWED_LINKS number of links
 	if ( count( $recently_viewed_posts ) > MAX_RECENTLY_VIEWED_LINKS ) 
@@ -139,7 +143,7 @@ function get_recently_viewed_posts( $max_shown = 10 ) {
 				$print .= ( $count2 == 1 ) ? ', 1 '.$name2 : ", $count2 {$name2}s";
 			}
 		}
-		return $print;
+		return apply_filters("recently_viewed_posts_time_since", $print);
 	}
 
 	if ( $max_shown + 0 > 0 );
@@ -151,7 +155,7 @@ function get_recently_viewed_posts( $max_shown = 10 ) {
 	$html = "";
 	$count = 0;
 	
-	$html .= "<!-- BUFFER:".count( $recently_viewed_posts )."-->";
+	$html .= "<!-- BUFFER:" . count( $recently_viewed_posts ) . "-->";
 
 	// run a WP_Query so that the get_permalinks and get_the_titles don't cause individual queries.
 	if ( $max_shown > 5 ) { // guesstimate threshold
@@ -167,15 +171,27 @@ function get_recently_viewed_posts( $max_shown = 10 ) {
 	$count = 0;
 	foreach ( $recently_viewed_posts as $item ) 
 		if ( $item[1] != recently_viewed_posts_get_remote_IP() ) {
-			$html .= '<li class="recently-viewed-posts-item"><img src="http://www.gravatar.com/avatar/' . $item[1] 
-				.'.jpg?s=10&amp;d=identicon" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="'
-				.get_permalink( $item[0] ).'" class="recently-viewed-posts-link">'.get_the_title( $item[0] ).'</a> <span class="recently-viewed-posts-timespan">'
-				.recently_viewed_posts_time_since( $item[2] ).' ago</span> </li>';
+			$search = array( 
+				"%ICON%", 
+				"%URL%",
+				"%LINK%",
+				"%TIME%"
+			);
+			$replace = array(
+				"http://www.gravatar.com/avatar/{$item[1]}.jpg?s=10&amp;d=identicon",
+				get_permalink( $item[0] ),
+				get_the_title( $item[0] ),
+				recently_viewed_posts_time_since( $item[2] )
+			);
+			$subject = '<li class="recently-viewed-posts-item"><img src="%ICON%" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="%URL%" class="recently-viewed-posts-link">%LINK%</a> <span class="recently-viewed-posts-timespan">%TIME% ago</span></li>';
+			$subject = apply_filters( "recently_viewed_posts_entry_format", $subject, $item );
+			$entry = str_replace( $search, $replace, $subject );
+			$html .= apply_filters( "recently_viewed_posts_entry", $entry );
 			if ( ++$count == $max_shown ) 
 				break;  // i've shown enough
 		}
 		
-	return $html;
+	return apply_filters( "get_recently_viewed_posts", $html );
 }
 
 // Okay, now define as widget
@@ -238,9 +254,10 @@ function recently_viewed_posts_get_remote_IP() {
 		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 	$ip = $_SERVER['REMOTE_ADDR'];
 	if ( defined(SECRET_KEY) )
-		return md5( ip2long( $ip ) . SECRET_KEY );
+		$md5 = md5( ip2long( $ip ) . SECRET_KEY );
 	else
-		return md5( ip2long( $ip ) );
+		$md5 = md5( ip2long( $ip ) );
+	return apply_filters( "recently_viewed_posts_get_remote_IP", $md5 );
 }
 
 ?>

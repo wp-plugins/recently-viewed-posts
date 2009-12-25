@@ -12,27 +12,28 @@ Displays the titles of the last x number of posts that readers (other than the c
 
 Display the titles of the last `x` number of posts that readers visited on your blog, and the amount of time elapsed since they visited it, in a variety of forms:
 
-* return them as a string of list items
+* return them as a string of list items.
 * print a ul list with a h3 heading and enclosed as a div. 
 * as a WordPress widget.
 
 = Rationale =
 
-* Readers are curious what other readers have found interesting to read. RVP is very addictive. Try it on your site and see your traffic increase.
+* Readers are curious what other readers have found interesting to read. That's why RVP is very addictive. Put it on your site where readers can see it and watch your traffic increase.
 
 = Features =
 
 * Insanely fast. It has to be because it needs to run on each page load.
 * Creates and uses no tables, writes no files, uses no cookies, loads no css or javascript, needs no plugin initialization.
-* Produces XHTML-compliant, semantic markup
+* Produces XHTML-compliant, semantic markup.
 * Each IP is identified by and anonymized with a graphical 10x10 icon using Gravatar.
 * Can be modified to record and display the posts' publication date, referer data, search keywords or cookies. Whatever you want or what your Privacy Policy allows.
+* Comprehensive API to let you do everything you want without touching the plugin source code.
 
 = Technobabbly features =
 
-* IP addresses are hashed before being stored, so nobody cannot get them from your database backups. Hashing uses your blog's `SECRET_KEY` where available, to protect against rainbow tables.
+* IP addresses are hashed before being stored, so nobody can get them from your database backups. Hashing uses your blog's `SECRET_KEY` where available, to protect against rainbow tables.
 * Uses `$_SERVER['HTTP_CLIENT_IP']` or `$_SERVER['HTTP_X_FORWARDED_FOR']` instead of `$_SERVER['REMOTE_ADDR']` where available.
-* Uses the WordPress Object Cache. If the posts' data are already retrieved earlier, this plugin will use it instead of querying the database.
+* Uses the WordPress Object Cache. If the posts' data were already retrieved earlier, this plugin will use that instead of querying the database.
 * If you list more than 5 items, the plugin retrieves the posts' data in one `wp_query`, instead of individually.
 * Uses the WordPress 2.8 Transients API where available.
 
@@ -51,14 +52,80 @@ Display the titles of the last `x` number of posts that readers visited on your 
 </ul></div></div>
 `
 
+
 = Demo =
 
 http://www.pinoy.ca/eharmony/1616 shows two versions of it in action.
 
-= Hooks and Filters =
+== API ==
 
-(Future version will support hooks and filters, so that you can alter the plugin workings without editing the plugin.  How's that for service?)
+Here is the complete set of filters and hooks, so you never have to need to edit the plugin.  How's that for service?
 
+= recently_viewed_posts_cache_set =
+
+Filter applied to the data saved to the RVP cache before it is saved.
+
+*Possible use:* Saving the data to file or to a database.
+
+= recently_viewed_posts_cache_get =
+
+Filter applied to the value retrieved from the RVP cache before it is used.
+
+*Possible use:* Retrieving the data from file or from a database.
+
+= recently_viewed_posts_uninstall_pre =
+
+Action run before uninstallation.
+
+= recently_viewed_posts_new =
+
+Filter applied to the visit's data before processing.  For more information, see the code snippet below.
+
+`
+	$data = array( $post->ID, recently_viewed_posts_get_remote_IP(), time() );
+	array_unshift( $recently_viewed_posts, apply_filters( "recently_viewed_posts_new", $data ) );
+`
+
+*Possible use:* Saving whatever you like about the visit.
+
+= recently_viewed_posts_entry_format =
+
+Filter applied to the display format of each entry.  For more information, see the code snippet below.
+
+`
+	$subject = '<li class="recently-viewed-posts-item"><img src="%ICON%" alt=" " width="10" height="10" class="recently-viewed-posts-icon" />&nbsp;<a href="%URL%" class="recently-viewed-posts-link">%LINK%</a> <span class="recently-viewed-posts-timespan">%TIME% ago</span></li>';
+	$subject = apply_filters( "recently_viewed_posts_entry_format", $subject, $item );
+`
+
+*Possible uses:* 
+
+* Rewrite the HTML markup of the plugin to whatever you like.
+* Process what you saved with `recently_viewed_posts_new`. 
+* Display additional information about the visit.
+
+= recently_viewed_posts_entry = 
+
+Filter applied to each visit entry before it is compiled as a list.
+
+*Possible uses:* same as `recently_viewed_posts_entry_format`
+
+= get_recently_viewed_posts =
+
+Filter applied to the output of the `get_recently_viewed_posts` function.
+
+*Possible uses:* same as `recently_viewed_posts_entry_format`
+
+= recently_viewed_posts_time_since =
+
+Filter applied to the text indicating the time duration.
+
+*Possible use:* Displaying additional information other than time.
+
+= recently_viewed_posts_get_remote_IP =
+
+Filter applied to the visit's IP address *after* it has been anonymized and *before* it is used by the plugin.
+
+*Possible use:* Use another way of identifying visitors, such as cookies, Flash cookies, ISPs, etc.
 
 == Installation ==
 
@@ -90,15 +157,41 @@ You can set `MAX_RECENTLY_VIEWED_LINKS` in your wp-config.php, or just edit the 
 
 Remember that it displays what *other readers* visited.  Tell a friend across the country to visit your blog.
 
+= My traffic didn't increase. That's false advertising! =
+
+Did you put it where readers can see it, like at the end of each post?  Using this as a sidebar widget is for cowards.
+
+= How do I customize the output template? =
+
+Create a handler for the `recently_viewed_posts_entry_format` filter in your theme's `functions.php`.  For example, the following removes the icon and adds javascript interaction:
+
+`
+add_filter("recently_viewed_posts_entry_format", "my_RVP_format");
+function my_rvp_format( $format ) {
+	return '<li onmouseover="javascript:dynamo()"><a href="%URL%">%LINK%</a> %TIME% ago</li>';
+}
+`
+
 = Can a visitor masquerade as another visitor? =
 
-Of course.  See (http://en.wikipedia.org/wiki/IP_address_spoofing http://en.wikipedia.org/wiki/IP_address_spoofing) for starters.
+Of course.  See http://en.wikipedia.org/wiki/IP_address_spoofing for starters.
+
+= Can a reader trace the other readers' IPs from the icon? =
+
+Hashing with a `SECRET_KEY` salt makes this impossible.
+
+= Can I hide my visits? =
+
+This will be tackled in an upcoming version.
 
 = Does it work with WP Super Cache? =
 
 Since the plugin code needs to run on each page load, this plugin will not run when Super Cache is installed and active.  A future version will run in Super Cache half-on mode and another version after that will run in Super Cache full mode.
 
 == Changelog ==
+
+= 2.1 =
+* Plugin API
 
 = 2.0.1 =
 * Classes in markup.
@@ -110,6 +203,9 @@ Since the plugin code needs to run on each page load, this plugin will not run w
 * Unreleased
  
 == Upgrade Notice ==
+
+= 2.1 =
+This version now has a comprehensive API, so you can readily customize the plugin without ever touching the plugin source code.
 
 = 1.0 =
 Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.

@@ -82,8 +82,10 @@ Action run before uninstallation.
 Filter applied to the visit's data before processing.  For more information, see the code snippet below.
 
 `
-	$data = array( $post->ID, recently_viewed_posts_get_remote_IP(), time() );
-	array_unshift( $recently_viewed_posts, apply_filters( "recently_viewed_posts_new", $data ) );
+	$item = array( $post->ID, recently_viewed_posts_get_remote_IP(), time() );
+	$item = apply_filters( "recently_viewed_posts_new", $item );
+	if ( empty( $item ) ) return;
+	array_unshift( $recently_viewed_posts, $item );
 `
 
 *Possible use:* Saving whatever you like about the visit.
@@ -161,12 +163,23 @@ Remember that it displays what *other readers* visited.  Tell a friend across th
 
 Did you put it where readers can see it, like at the end of each post?  Using this as a sidebar widget is for cowards.
 
+= How can the plugin ignore my visits? =
+
+Create a handler for the `recently_viewed_posts_new` filter in your theme's `functions.php` that will return `NULL` on your own visits.  For example,
+
+`
+add_filter("recently_viewed_posts_new", "my_rvp_ignore_admin_visits");
+function my_rvp_ignore_admin_visits( $item ) {
+	return is_admin() ? null : $item;
+}
+`
+
 = How do I customize the output template? =
 
 Create a handler for the `recently_viewed_posts_entry_format` filter in your theme's `functions.php`.  For example, the following removes the icon and adds javascript interaction:
 
 `
-add_filter("recently_viewed_posts_entry_format", "my_RVP_format");
+add_filter("recently_viewed_posts_entry_format", "my_rvp_format");
 function my_rvp_format( $format ) {
 	return '<li onmouseover="javascript:dynamo()"><a href="%URL%">%LINK%</a> %TIME% ago</li>';
 }

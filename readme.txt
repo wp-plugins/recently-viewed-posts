@@ -3,7 +3,7 @@ Contributors: Pinoy.ca
 Donate link: http://wwf.com/
 Tags: recently-viewed, recent
 Requires at least: 2.1
-Tested up to: 2.8.9
+Tested up to: 2.9
 Stable tag: trunk
 
 Displays the titles of the last x number of posts that readers (other than the current reader) visited on your blog, and the amount of time elapsed since they visited it.
@@ -209,6 +209,9 @@ Hashing with a `SECRET_KEY` salt makes this impossible.
 Since the plugin code needs to run on each page load, this plugin will not run when Super Cache is installed and active.  A future version will run in Super Cache half-on mode and another version after that will run in Super Cache full mode.
 
 == Changelog ==
+
+= 2.1.1 =
+* Internationalization
 
 = 2.1 =
 * Plugin API

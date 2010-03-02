@@ -213,6 +213,9 @@ Since the plugin code needs to run on each page load, this plugin will not run w
 = 2.1.1 =
 * Internationalization
 
+= 2.1.0.1 =
+* Small bug-fix to http://wordpress.org/support/topic/369416
+
 = 2.1 =
 * Plugin API
 
@@ -226,6 +229,9 @@ Since the plugin code needs to run on each page load, this plugin will not run w
 * Unreleased
  
 == Upgrade Notice ==
+
+= 2.1.0.1 =
+Bug-fix for http://wordpress.org/support/topic/369416 .
 
 = 2.1 =
 This version now has a comprehensive API, so you can readily customize the plugin without ever touching the plugin source code.

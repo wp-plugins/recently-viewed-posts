@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Recently Viewed Posts
-Version: 2.1.0
+Version: 2.1.0.1
 Plugin URI: http://www.pinoy.ca/
 Description: Show "What others are reading now" links on your page. 
 Author: Pinoy.ca 
 Author URI: http://www.pinoy.ca/
 
-Copyright ( c ) 2009
+Copyright ( c ) 2010
 Released under the GPL license
 http://www.gnu.org/licenses/gpl.txt
 
@@ -100,53 +100,52 @@ function add_to_recently_viewed_posts() {
 	recently_viewed_posts_cache_set( $recently_viewed_posts );
 }
 
+/* Works out the time since the entry post, takes a an argument in unix time ( seconds ) */
+function recently_viewed_posts_time_since( $original ) {
+	// array of time period chunks
+	$chunks = array( 
+		array( 60 * 60 * 24 * 365 , 'year' ),
+		array( 60 * 60 * 24 * 30 , 'month' ),
+		array( 60 * 60 * 24 * 7, 'week' ),
+		array( 60 * 60 * 24 , 'day' ),
+		array( 60 * 60 , 'hour' ),
+		array( 60 , 'minute' ),
+	array( 1, 'second' ),
+	 );
 	
+	$today = time(); /* Current unix time  */
+	$since = $today - $original;
+	
+	// $j saves performing the count function each time around the loop
+	for ( $i = 0, $j = count( $chunks ); $i < $j; $i++ ) {
+		
+		$seconds = $chunks[$i][0];
+		$name = $chunks[$i][1];
+		
+		// finding the biggest chunk ( if the chunk fits, break )
+		if ( ( $count = floor( $since / $seconds ) ) != 0 ) {
+			// DEBUG print "<!-- It's $name -->\n";
+			break;
+		}
+	}
+	
+	$print = ( $count == 1 ) ? '1 '.$name : "$count {$name}s";
+	
+	if ( $i + 1 < $j ) {
+		// now getting the second item
+		$seconds2 = $chunks[$i + 1][0];
+		$name2 = $chunks[$i + 1][1];
+		
+		// add second item if it's greater than 0
+		if ( ( $count2 = floor( ( $since - ( $seconds * $count ) ) / $seconds2 ) ) != 0 ) {
+			$print .= ( $count2 == 1 ) ? ', 1 '.$name2 : ", $count2 {$name2}s";
+		}
+	}
+	return apply_filters("recently_viewed_posts_time_since", $print);
+}
+
 // returns <li> list of recently viewed posts, excluding visits by this visitor
 function get_recently_viewed_posts( $max_shown = 10 ) {
-
-	/* Works out the time since the entry post, takes a an argument in unix time ( seconds ) */
-	function recently_viewed_posts_time_since( $original ) {
-		// array of time period chunks
-		$chunks = array( 
-			array( 60 * 60 * 24 * 365 , 'year' ),
-			array( 60 * 60 * 24 * 30 , 'month' ),
-			array( 60 * 60 * 24 * 7, 'week' ),
-			array( 60 * 60 * 24 , 'day' ),
-			array( 60 * 60 , 'hour' ),
-			array( 60 , 'minute' ),
-		array( 1, 'second' ),
-		 );
-		
-		$today = time(); /* Current unix time  */
-		$since = $today - $original;
-		
-		// $j saves performing the count function each time around the loop
-		for ( $i = 0, $j = count( $chunks ); $i < $j; $i++ ) {
-			
-			$seconds = $chunks[$i][0];
-			$name = $chunks[$i][1];
-			
-			// finding the biggest chunk ( if the chunk fits, break )
-			if ( ( $count = floor( $since / $seconds ) ) != 0 ) {
-				// DEBUG print "<!-- It's $name -->\n";
-				break;
-			}
-		}
-		
-		$print = ( $count == 1 ) ? '1 '.$name : "$count {$name}s";
-		
-		if ( $i + 1 < $j ) {
-			// now getting the second item
-			$seconds2 = $chunks[$i + 1][0];
-			$name2 = $chunks[$i + 1][1];
-			
-			// add second item if it's greater than 0
-			if ( ( $count2 = floor( ( $since - ( $seconds * $count ) ) / $seconds2 ) ) != 0 ) {
-				$print .= ( $count2 == 1 ) ? ', 1 '.$name2 : ", $count2 {$name2}s";
-			}
-		}
-		return apply_filters("recently_viewed_posts_time_since", $print);
-	}
 
 	if ( $max_shown + 0 > 0 );
 	else $max_shown = 10;
